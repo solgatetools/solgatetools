@@ -122,7 +122,7 @@ export default function DocsPage() {
             <div className="nav-icons">
               <a
                 className="icon-button"
-                href="https://x.com"
+                href="https://x.com/solgatetools"
                 target="_blank"
                 rel="noopener"
                 aria-label="X"
@@ -133,7 +133,7 @@ export default function DocsPage() {
               </a>
               <a
                 className="icon-button"
-                href="https://github.com"
+                href="https://github.com/solgatetools/solgatetools"
                 target="_blank"
                 rel="noopener"
                 aria-label="GitHub"
@@ -190,10 +190,10 @@ export default function DocsPage() {
               >
                 <h3>How the fee split works</h3>
                 <p>
-                  On each paid request, SolGate calculates a fee in basis
-                  points and routes it to a dedicated vault. The vault can
-                  later swap accumulated funds into a target token (buyback)
-                  and optionally burn or send to treasury.
+                  On each paid request, SolGate calculates a fee in basis points
+                  and routes it to a dedicated vault. The vault can later swap
+                  accumulated funds into a target token (buyback) and optionally
+                  burn or send to treasury.
                 </p>
                 <pre>
                   <code>{paymentSplitCode}</code>
@@ -225,17 +225,16 @@ export default function DocsPage() {
                 <h3>Basic usage (Node)</h3>
                 <p>
                   Wrap your paid routes with <span className="tag">solgate()</span>.
-                  If payment is missing, it responds with 402 and
-                  instructions. If payment is valid, it forwards the request to
-                  your handler.
+                  If payment is missing, it responds with 402 and instructions.
+                  If payment is valid, it forwards the request to your handler.
                 </p>
                 <pre>
                   <code>{usageCode}</code>
                 </pre>
 
                 <div className="note warn">
-                  <b>MVP tip:</b> keep it simple — accept payments in USDC
-                  only, route fee to vault, and run buybacks on a schedule.
+                  <b>MVP tip:</b> keep it simple — accept payments in USDC only,
+                  route fee to vault, and run buybacks on a schedule.
                 </div>
               </article>
 
@@ -260,10 +259,9 @@ export default function DocsPage() {
               >
                 <h3>Buyback vault (simple approach)</h3>
                 <p>
-                  Start with a simple off-chain buyback bot: it checks the
-                  vault balance every X minutes and swaps USDC -&gt; target
-                  token. Then it sends tokens to a burn address or a treasury
-                  wallet.
+                  Start with a simple off-chain buyback bot: it checks the vault
+                  balance every X minutes and swaps USDC -&gt; target token.
+                  Then it sends tokens to a burn address or a treasury wallet.
                 </p>
                 <pre>
                   <code>{vaultCode}</code>
