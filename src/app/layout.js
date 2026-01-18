@@ -3,18 +3,18 @@ import { JetBrains_Mono, Sora } from "next/font/google";
 
 const sora = Sora({
   subsets: ["latin"],
-  variable: "--font-sans"
+  variable: "--font-sans",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-mono"
+  variable: "--font-mono",
 });
 
 export const metadata = {
-  title: "Pulse402 - Usage -> Buybacks",
+  title: "SolGate — Usage → Buybacks",
   description:
-    "Pulse402 is a simple HTTP 402 payment wrapper that adds a programmable fee routed to buybacks for any project token."
+    "SolGate is a programmable HTTP 402 payment layer that routes usage fees into automated buybacks, turning real usage into buy pressure.",
 };
 
 export default function RootLayout({ children }) {
