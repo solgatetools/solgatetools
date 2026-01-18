@@ -27,11 +27,6 @@ app.get(
     fee: {
       bps: 50,
       destination: "BUYBACK_VAULT_WALLET"
-    },
-    buybackTarget: {
-      chain: "solana",
-      tokenMint: "TARGET_TOKEN_MINT",
-      mode: "burn"
     }
   }),
   async (req, res) => {
@@ -81,50 +76,39 @@ export default function DocsPage() {
           </div>
 
           <div className="docs-grid">
-            {/* MOBILE TOC */}
             <aside className={`toc-shell ${tocOpen ? "open" : ""}`}>
-              <button
-                className="toc-toggle"
-                onClick={() => setTocOpen(!tocOpen)}
-              >
+              <button className="toc-toggle" onClick={() => setTocOpen(!tocOpen)}>
                 {tocOpen ? "Hide sections" : "Show sections"}
                 <span className="toc-caret" />
               </button>
 
               <nav className="toc">
-                <a href="#doc-what" onClick={() => setTocOpen(false)}>What it is</a>
-                <a href="#doc-flow" onClick={() => setTocOpen(false)}>Fee split</a>
-                <a href="#doc-install" onClick={() => setTocOpen(false)}>Install</a>
-                <a href="#doc-usage" onClick={() => setTocOpen(false)}>Usage</a>
-                <a href="#doc-config" onClick={() => setTocOpen(false)}>Config</a>
-                <a href="#doc-faq" onClick={() => setTocOpen(false)}>FAQ</a>
+                <a href="#what" onClick={() => setTocOpen(false)}>What it is</a>
+                <a href="#flow" onClick={() => setTocOpen(false)}>Fee split</a>
+                <a href="#install" onClick={() => setTocOpen(false)}>Install</a>
+                <a href="#usage" onClick={() => setTocOpen(false)}>Usage</a>
               </nav>
             </aside>
 
             <div className="stack">
-              <article id="doc-what" className="doc-card">
+              <article id="what" className="doc-card">
                 <h3>What is SolGate?</h3>
-                <p>SolGate is a programmable HTTP 402 payment layer.</p>
+                <p>SolGate converts paid usage into programmable buybacks.</p>
               </article>
 
-              <article id="doc-flow" className="doc-card">
-                <h3>How the fee split works</h3>
+              <article id="flow" className="doc-card">
+                <h3>Fee split</h3>
                 <pre><code>{paymentSplitCode}</code></pre>
               </article>
 
-              <article id="doc-install" className="doc-card">
+              <article id="install" className="doc-card">
                 <h3>Install</h3>
                 <pre><code>{installCode}</code></pre>
               </article>
 
-              <article id="doc-usage" className="doc-card">
-                <h3>Basic usage</h3>
+              <article id="usage" className="doc-card">
+                <h3>Usage</h3>
                 <pre><code>{usageCode}</code></pre>
-              </article>
-
-              <article id="doc-faq" className="doc-card">
-                <h3>FAQ</h3>
-                <p>No transfer taxes. Fees come from usage.</p>
               </article>
             </div>
           </div>
