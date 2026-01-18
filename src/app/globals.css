@@ -956,4 +956,65 @@ pre {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+/* ================================
+   DOCS – MOBILE OPTIMIZATION
+   ================================ */
+
+@media (max-width: 720px) {
+  /* Docs layout */
+  .docs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* TOC as top block */
+  .toc {
+    position: relative;
+    top: auto;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+
+  .toc a {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  /* Docs cards */
+  .doc-card {
+    padding: 16px;
+  }
+
+  .doc-card h3 {
+    font-size: 15px;
+  }
+
+  .doc-card p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Code blocks – MOBILE SAFE */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    font-size: 12px;
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  code {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* Header spacing */
+  .section-head h2 {
+    font-size: 15px;
+  }
+
+  .section-head p {
+    font-size: 13px;
+  }
+}
 
