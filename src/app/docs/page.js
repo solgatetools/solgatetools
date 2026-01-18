@@ -8,18 +8,18 @@ feeBps    = 50        // 0.50%
 fee       = basePrice * (feeBps / 10_000) = 0.00005 USDC
 merchant  = basePrice - fee = 0.00995 USDC`;
 
-const installCode = `npm i pulse402
+const installCode = `npm i solgate
 # or
-pnpm add pulse402`;
+pnpm add solgate`;
 
 const usageCode = `import express from "express";
-import { pulse402 } from "pulse402";
+import { solgate } from "solgate";
 
 const app = express();
 
 app.get(
   "/api/pro",
-  pulse402({
+  solgate({
     merchant: {
       address: "MERCHANT_WALLET",
       priceUSDC: 0.01
@@ -39,9 +39,9 @@ app.get(
   }
 );
 
-app.listen(8787, () => console.log("Pulse402 server on :8787"));`;
+app.listen(8787, () => console.log("SolGate server on :8787"));`;
 
-const configCode = `type Pulse402Config = {
+const configCode = `type SolGateConfig = {
   merchant: {
     address: string;    // merchant destination address
     priceUSDC: number;  // base price per request
@@ -60,7 +60,7 @@ const configCode = `type Pulse402Config = {
     bps: number;        // protocol fee bps
     destination: string;// protocol vault
     discounts?: {
-      tokenMint: string;// $P402 mint
+      tokenMint: string;// $SG mint
       minBalance: number;
       discountedBps: number;
     };
@@ -113,7 +113,7 @@ export default function DocsPage() {
           <a className="logo" href="/">
             <div className="logo-mark" aria-hidden="true"></div>
             <div>
-              <div>Pulse402</div>
+              <div>SolGate</div>
               <small>Usage -&gt; Buybacks</small>
             </div>
           </a>
@@ -139,7 +139,7 @@ export default function DocsPage() {
                 aria-label="GitHub"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-3 .7-3.6-1.3-3.6-1.3-.5-1.2-1.1-1.5-1.1-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 1.5-.8 1.7-1.1.1-.7.4-1.1.7-1.4-2.4-.3-4.9-1.2-4.9-5.4 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.3 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.8 1.1 3 0 4.2-2.5 5.1-4.9 5.4.4.3.7 1 .7 2v3c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" />
+                  <path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-3 .7-3.6-1.3-3.6-1.3-.5-1.2-1.1-1.5-1.1-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.7 1 .1 1.5-.8 1.7-1.1.1-.7.4-1.1.7-1.4-2.4-.3-4.9-1.2-4.9-5.4 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.3 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.8 1.1 3 0 4.2-2.5 5.1-4.9 5.4.4.3.7 1 .7 2v3c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" />
                 </svg>
               </a>
             </div>
@@ -168,9 +168,9 @@ export default function DocsPage() {
 
             <div className="stack">
               <article id="doc-what" className="doc-card" data-reveal>
-                <h3>What is Pulse402?</h3>
+                <h3>What is SolGate?</h3>
                 <p>
-                  Pulse402 is a tiny middleware that returns an
+                  SolGate is a tiny middleware that returns an
                   <strong> HTTP 402 Payment Required</strong> response when
                   payment is missing, and (when payment is present) it
                   <strong> splits</strong> the payment into merchant revenue +
@@ -190,7 +190,7 @@ export default function DocsPage() {
               >
                 <h3>How the fee split works</h3>
                 <p>
-                  On each paid request, Pulse402 calculates a fee in basis
+                  On each paid request, SolGate calculates a fee in basis
                   points and routes it to a dedicated vault. The vault can
                   later swap accumulated funds into a target token (buyback)
                   and optionally burn or send to treasury.
@@ -209,7 +209,7 @@ export default function DocsPage() {
                 <h3>Install</h3>
                 <p>
                   In your server/app, install the middleware package. (Package
-                  name is placeholder - replace once you publish.)
+                  name is placeholder — replace once you publish.)
                 </p>
                 <pre>
                   <code>{installCode}</code>
@@ -224,8 +224,8 @@ export default function DocsPage() {
               >
                 <h3>Basic usage (Node)</h3>
                 <p>
-                  Wrap your paid routes with <span className="tag">pulse402()</span>
-                  . If payment is missing, it responds with 402 and
+                  Wrap your paid routes with <span className="tag">solgate()</span>.
+                  If payment is missing, it responds with 402 and
                   instructions. If payment is valid, it forwards the request to
                   your handler.
                 </p>
@@ -234,7 +234,7 @@ export default function DocsPage() {
                 </pre>
 
                 <div className="note warn">
-                  <b>MVP tip:</b> keep it simple - accept payments in USDC
+                  <b>MVP tip:</b> keep it simple — accept payments in USDC
                   only, route fee to vault, and run buybacks on a schedule.
                 </div>
               </article>
@@ -246,7 +246,7 @@ export default function DocsPage() {
                 style={{ "--delay": "200ms" }}
               >
                 <h3>Config reference</h3>
-                <p>Minimal config you need to run Pulse402.</p>
+                <p>Minimal config you need to run SolGate.</p>
                 <pre>
                   <code>{configCode}</code>
                 </pre>
@@ -289,7 +289,7 @@ export default function DocsPage() {
                     color: "var(--muted)",
                     lineHeight: 1.6,
                     fontSize: "13px",
-                    paddingLeft: "18px"
+                    paddingLeft: "18px",
                   }}
                 >
                   <li>Use a dedicated vault wallet per project.</li>
