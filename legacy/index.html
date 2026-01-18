@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pulse402 - Usage -> Buybacks</title>
+    <meta
+      name="description"
+      content="Pulse402 is a simple HTTP 402 payment wrapper that adds a programmable fee routed to buybacks for any project token."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-glow" aria-hidden="true"></div>
+
+    <!-- NAV -->
+    <div class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="#top">
+          <div class="mark" aria-hidden="true"></div>
+          <div>
+            <span>Pulse402</span>
+            <small>Usage -> Buybacks</small>
+          </div>
+        </a>
+        <div class="navlinks">
+          <a href="#usecases">Use cases</a>
+          <a href="#docs">Docs</a>
+          <a href="#snippets">Snippets</a>
+          <a href="#token">Token</a>
+          <a href="#socials">Socials</a>
+          <div class="status"><span class="dot"></span> Live preview</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <header id="top" class="hero">
+      <div class="wrap hero-grid">
+        <div class="card" data-reveal>
+          <div class="card-inner">
+            <h1>HTTP 402 payments with a built-in buyback fee.</h1>
+            <p class="sub">
+              Pulse402 is a tiny "x402-style" payment wrapper that adds a
+              programmable fee on every paid request. That fee is routed to a
+              buyback vault for <b>any</b> token or project - turning real usage
+              into real buy pressure.
+            </p>
+
+            <div class="cta">
+              <a class="btn primary" href="#docs">Read the docs</a>
+              <a class="btn" href="#snippets">Copy snippets</a>
+              <a class="btn secondary" href="#token">Token info</a>
+            </div>
+
+            <div class="pillbar">
+              <div class="pill">Simple middleware</div>
+              <div class="pill">Transparent fee split</div>
+              <div class="pill">Buyback vault routing</div>
+              <div class="pill">Works for any project</div>
+            </div>
+
+            <p class="hint">
+              Built for builders: add one config, start collecting usage-fees
+              that can buy back tokens on schedule.
+            </p>
+          </div>
+        </div>
+
+        <!-- TOKEN / CA BOX -->
+        <aside id="token" class="card" data-reveal style="--delay: 120ms">
+          <div class="card-inner">
+            <div class="token-title">
+              <h3>$P402 Token</h3>
+              <span class="badge">Launching soon</span>
+            </div>
+
+            <div class="statgrid">
+              <div class="stat">
+                <b>Utility</b>
+                <span>Protocol fee discounts - verified badge - governance</span>
+              </div>
+              <div class="stat">
+                <b>Mechanic</b>
+                <span>Protocol fees -> $P402 buybacks (optional)</span>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <b
+              style="
+                display: block;
+                color: var(--muted-2);
+                font-size: 12px;
+                letter-spacing: 0.35px;
+                text-transform: uppercase;
+              "
+              >Contract Address (CA)</b>
+            <div class="copyfield">
+              <input
+                id="contract-address"
+                value="PASTE_CA_HERE_AFTER_LAUNCH"
+                readonly
+                onclick="this.select()"
+                aria-label="Contract address"
+              />
+              <button
+                class="btn small"
+                type="button"
+                data-copy="#contract-address"
+              >
+                Copy
+              </button>
+            </div>
+            <div class="copyhelp">
+              Tip: click the Copy button or select the field, then press
+              <span class="k">Ctrl</span>+<span class="k">C</span> (or
+              <span class="k">Cmd</span>+<span class="k">C</span>).
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="note warn" data-reveal style="--delay: 160ms">
+              <b>Simple promise:</b> Pulse402 does not tax token transfers. It
+              adds a fee to <i>revenue</i> (paid requests), then routes that fee
+              to a vault that can buy back any token on a schedule.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <!-- USE CASES -->
+    <section id="usecases">
+      <div class="wrap">
+        <div class="section-title" data-reveal>
+          <h2>Use cases</h2>
+          <p>Where Pulse402 shines</p>
+        </div>
+
+        <div class="tiles">
+          <div class="tile" data-reveal style="--delay: 60ms">
+            <h4>Paid APIs & Bots</h4>
+            <p>
+              Charge <span class="k">HTTP 402</span> per request. Route a small
+              fee to a buyback vault that accumulates USDC and swaps into your
+              token.
+            </p>
+          </div>
+          <div class="tile" data-reveal style="--delay: 120ms">
+            <h4>Paywalled content</h4>
+            <p>
+              Make premium endpoints (downloads, streams, tools) paid per call.
+              Every interaction becomes continuous buy pressure.
+            </p>
+          </div>
+          <div class="tile" data-reveal style="--delay: 180ms">
+            <h4>Creator tools / SaaS</h4>
+            <p>
+              Offer a free tier and a paid tier. The paid tier routes fees into
+              "public buybacks" that your community can track.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOCS -->
+    <section id="docs">
+      <div class="wrap">
+        <div class="section-title" data-reveal>
+          <h2>Documentation</h2>
+          <p>Quickstart + configuration</p>
+        </div>
+
+        <div class="docs">
+          <!-- TOC -->
+          <nav class="toc" aria-label="Docs table of contents" data-reveal>
+            <a href="#doc-what">What it is</a>
+            <a href="#doc-flow">How the fee split works</a>
+            <a href="#doc-install">Install</a>
+            <a href="#doc-usage">Basic usage</a>
+            <a href="#doc-config">Config reference</a>
+            <a href="#doc-vault">Buyback vault (simple)</a>
+            <a href="#doc-security">Security notes</a>
+            <a href="#doc-faq">FAQ</a>
+          </nav>
+
+          <!-- CONTENT -->
+          <div class="grid">
+            <article id="doc-what" class="doccard" data-reveal>
+              <h3>What is Pulse402?</h3>
+              <p>
+                Pulse402 is a tiny middleware that returns an
+                <b>HTTP 402 Payment Required</b> response when payment is
+                missing, and (when payment is present) it <b>splits</b> the
+                payment into: <span class="k">merchant revenue</span> +
+                <span class="k">buyback fee</span>.
+              </p>
+              <div class="note">
+                <b>Core idea:</b> Do not "tax transfers." Monetize actual usage.
+                Route usage-fees into buybacks.
+              </div>
+            </article>
+
+            <article
+              id="doc-flow"
+              class="doccard"
+              data-reveal
+              style="--delay: 80ms"
+            >
+              <h3>How the fee split works</h3>
+              <p>
+                On each paid request, Pulse402 calculates a fee in basis points
+                and routes it to a dedicated vault. The vault can later swap
+                accumulated funds into a target token (buyback) and optionally
+                burn or send to treasury.
+              </p>
+              <pre><code>// Payment split math (example)
+basePrice = 0.01 USDC
+feeBps    = 50        // 0.50%
+fee       = basePrice * (feeBps / 10_000) = 0.00005 USDC
+merchant  = basePrice - fee = 0.00995 USDC</code></pre>
+            </article>
+
+            <article
+              id="doc-install"
+              class="doccard"
+              data-reveal
+              style="--delay: 120ms"
+            >
+              <h3>Install</h3>
+              <p>
+                In your server/app, install the middleware package. (Package
+                name is placeholder - replace once you publish.)
+              </p>
+              <pre><code>npm i pulse402
+# or
+pnpm add pulse402</code></pre>
+            </article>
+
+            <article
+              id="doc-usage"
+              class="doccard"
+              data-reveal
+              style="--delay: 160ms"
+            >
+              <h3>Basic usage (Node)</h3>
+              <p>
+                Wrap your paid routes with <span class="k">pulse402()</span>. If
+                payment is missing, it responds with 402 and instructions. If
+                payment is valid, it forwards the request to your handler.
+              </p>
+              <pre><code>import express from "express";
+import { pulse402 } from "pulse402";
+
+const app = express();
+
+app.get(
+  "/api/pro",
+  pulse402({
+    merchant: {
+      address: "MERCHANT_WALLET",
+      priceUSDC: 0.01
+    },
+    fee: {
+      bps: 50, // 0.50%
+      destination: "BUYBACK_VAULT_WALLET"
+    },
+    buybackTarget: {
+      chain: "solana",
+      tokenMint: "TARGET_TOKEN_MINT",
+      mode: "burn" // or "treasury"
+    }
+  }),
+  async (req, res) => {
+    res.json({ ok: true, data: "premium response" });
+  }
+);
+
+app.listen(8787, () => console.log("Pulse402 server on :8787"));</code></pre>
+
+              <div class="note warn">
+                <b>MVP tip:</b> keep it simple - accept payments in USDC only,
+                route fee to vault, and run buybacks on a schedule.
+              </div>
+            </article>
+
+            <article
+              id="doc-config"
+              class="doccard"
+              data-reveal
+              style="--delay: 200ms"
+            >
+              <h3>Config reference</h3>
+              <p>Minimal config you need to run Pulse402.</p>
+              <pre><code>type Pulse402Config = {
+  merchant: {
+    address: string;    // merchant destination address
+    priceUSDC: number;  // base price per request
+  };
+  fee: {
+    bps: number;        // basis points (e.g., 50 = 0.50%)
+    destination: string;// buyback vault wallet address
+  };
+  buybackTarget?: {
+    chain: "solana";
+    tokenMint: string;  // token to buy back
+    mode: "burn" | "treasury";
+  };
+  protocol?: {
+    enabled: boolean;   // optional: take a small protocol fee
+    bps: number;        // protocol fee bps
+    destination: string;// protocol vault
+    discounts?: {
+      tokenMint: string;// $P402 mint
+      minBalance: number;
+      discountedBps: number;
+    };
+  };
+};</code></pre>
+            </article>
+
+            <article
+              id="doc-vault"
+              class="doccard"
+              data-reveal
+              style="--delay: 240ms"
+            >
+              <h3>Buyback vault (simple approach)</h3>
+              <p>
+                Start with a simple off-chain buyback bot: it checks the vault
+                balance every X minutes and swaps USDC -> target token. Then it
+                sends tokens to a burn address or a treasury wallet.
+              </p>
+              <pre><code>// buyback-bot pseudocode
+// 1) read vault USDC balance
+// 2) if balance > threshold:
+//    - get swap route (e.g. Jupiter)
+//    - execute swap
+//    - send bought tokens to burn/treasury
+// 3) log tx + update public stats page</code></pre>
+              <div class="note">
+                <b>Why this is good for MVP:</b> no custom program needed,
+                easier audits, you can ship fast. You can upgrade to a fully
+                on-chain vault later.
+              </div>
+            </article>
+
+            <article
+              id="doc-security"
+              class="doccard"
+              data-reveal
+              style="--delay: 280ms"
+            >
+              <h3>Security notes</h3>
+              <p>Keep the first version safe and boring:</p>
+              <ul
+                style="
+                  margin: 0;
+                  color: var(--muted);
+                  line-height: 1.6;
+                  font-size: 13px;
+                  padding-left: 18px;
+                "
+              >
+                <li>Use a dedicated vault wallet per project.</li>
+                <li>Log every buyback transaction publicly.</li>
+                <li>Set minimum swap thresholds to avoid dust swaps.</li>
+                <li>
+                  Do not promise "guaranteed profits." Focus on "fee routing +
+                  transparency."
+                </li>
+              </ul>
+            </article>
+
+            <article
+              id="doc-faq"
+              class="doccard"
+              data-reveal
+              style="--delay: 320ms"
+            >
+              <h3>FAQ</h3>
+              <p>
+                <b>Does this create sell pressure?</b><br />
+                No transfer taxes. Fees come from paid usage, then can be
+                swapped into buybacks.
+              </p>
+              <p>
+                <b>Can any project use it?</b><br />
+                Yes. They set their vault + target token mint in config.
+              </p>
+              <p>
+                <b>Do buybacks have to be automatic?</b><br />
+                No. You can run scheduled buybacks or manual buybacks with
+                public receipts.
+              </p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SNIPPETS -->
+    <section id="snippets">
+      <div class="wrap">
+        <div class="section-title" data-reveal>
+          <h2>Snippets</h2>
+          <p>Copy/paste friendly</p>
+        </div>
+
+        <div class="tiles">
+          <div class="tile" data-reveal style="--delay: 60ms">
+            <h4>Minimal config</h4>
+            <pre><code>{
+  "merchant": { "address": "MERCHANT_WALLET", "priceUSDC": 0.01 },
+  "fee": { "bps": 50, "destination": "BUYBACK_VAULT_WALLET" },
+  "buybackTarget": {
+    "chain": "solana",
+    "tokenMint": "TARGET_TOKEN_MINT",
+    "mode": "burn"
+  }
+}</code></pre>
+          </div>
+
+          <div class="tile" data-reveal style="--delay: 120ms">
+            <h4>Protect route</h4>
+            <pre><code>app.get("/api/pro",
+  pulse402(config),
+  (req, res) => res.json({ ok: true })
+);</code></pre>
+          </div>
+
+          <div class="tile" data-reveal style="--delay: 180ms">
+            <h4>Protocol token discount</h4>
+            <pre><code>protocol: {
+  enabled: true,
+  bps: 15,
+  destination: "PROTOCOL_VAULT",
+  discounts: {
+    tokenMint: "P402_MINT",
+    minBalance: 100_000,
+    discountedBps: 5
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="note warn" data-reveal style="--delay: 220ms">
+          <b>Design choice that stays simple:</b> Launch with USDC-only payments
+          + a scheduled buyback bot. Add multi-token/multi-chain later.
+        </div>
+      </div>
+    </section>
+
+    <!-- SOCIALS -->
+    <section id="socials">
+      <div class="wrap">
+        <div class="section-title" data-reveal>
+          <h2>Socials</h2>
+          <p>Add your links</p>
+        </div>
+
+        <div class="row socials" data-reveal style="--delay: 80ms">
+          <a class="chip" href="#" target="_blank" rel="noopener"
+            >X / Twitter: @Pulse402</a>
+          <a class="chip" href="#" target="_blank" rel="noopener"
+            >Telegram: t.me/pulse402</a>
+          <a class="chip" href="#" target="_blank" rel="noopener"
+            >Docs: docs.pulse402.xyz</a>
+          <a class="chip" href="#" target="_blank" rel="noopener"
+            >GitHub: github.com/pulse402</a>
+        </div>
+
+        <footer>
+          <div class="wrap" style="padding: 0">
+            <div class="divider"></div>
+            <div>
+              <b>Pulse402</b> - Usage -> Buybacks. Build real revenue, route real
+              fees, publish real receipts.
+            </div>
+            <div style="margin-top: 8px">
+              Disclaimer: This site is informational and does not constitute
+              financial advice. Token utility and mechanics may change.
+            </div>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </body>
+</html>
