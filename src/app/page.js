@@ -6,9 +6,8 @@ const BRAND = "SolGate";
 const SUBLINE = "Usage → Buybacks";
 
 const LINKS = {
-  x: "https://x.com",
+  x: "https://x.com/solgatetools",
   github: "https://github.com/solgatetools/solgatetools",
-  telegram: "https://t.me",
   docs: "/docs",
 };
 
@@ -259,16 +258,6 @@ export default function Home() {
                   aria-label="GitHub"
                 >
                   GitHub
-                </a>
-                <span className="social-sep"></span>
-                <a
-                  className="social-icon"
-                  href={LINKS.telegram}
-                  target="_blank"
-                  rel="noopener"
-                  aria-label="Telegram"
-                >
-                  Telegram
                 </a>
                 <span className="social-sep"></span>
                 <a className="social-icon" href={LINKS.docs} aria-label="Docs">
