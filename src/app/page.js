@@ -77,12 +77,24 @@ export default function Home() {
           <nav className="nav">
             <a href={LINKS.docs}>Docs</a>
             <div className="nav-icons">
-              <a className="icon-button" href={LINKS.x} target="_blank" rel="noopener" aria-label="X">
+              <a
+                className="icon-button"
+                href={LINKS.x}
+                target="_blank"
+                rel="noopener"
+                aria-label="X"
+              >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M18.9 2h3.6l-7.9 9 9.3 11h-7.3l-5.7-6.9L4.8 22H1.2l8.5-9.6L.8 2h7.5l5.1 6.2L18.9 2Zm-1.3 18h2L7.3 4H5.1l12.5 16Z" />
                 </svg>
               </a>
-              <a className="icon-button" href={LINKS.github} target="_blank" rel="noopener" aria-label="GitHub">
+              <a
+                className="icon-button"
+                href={LINKS.github}
+                target="_blank"
+                rel="noopener"
+                aria-label="GitHub"
+              >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-3 .7-3.6-1.3-3.6-1.3-.5-1.2-1.1-1.5-1.1-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 1.5-.8 1.7-1.1.1-.7.4-1.1.7-1.4-2.4-.3-4.9-1.2-4.9-5.4 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.3 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.8 1.1 3 0 4.2-2.5 5.1-4.9 5.4.4.3.7 1 .7 2v3c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" />
                 </svg>
@@ -104,13 +116,16 @@ export default function Home() {
                 <h1>Turn paid requests into automated buybacks.</h1>
 
                 <p className="subtle">
-                  {BRAND} is a minimal HTTP 402 payment layer. Add a configurable fee on every
-                  paid request and route it into a buyback vault for any token or project —
-                  converting real usage into real buy pressure.
+                  {BRAND} is a minimal HTTP 402 payment layer. Add a configurable
+                  fee on every paid request and route it into a buyback vault
+                  for any token or project — converting real usage into real buy
+                  pressure.
                 </p>
 
                 <div className="actions">
-                  <a className="button primary" href={LINKS.docs}>Read the docs</a>
+                  <a className="button primary" href={LINKS.docs}>
+                    Read the docs
+                  </a>
                 </div>
 
                 <div className="tag-row">
@@ -121,7 +136,8 @@ export default function Home() {
                 </div>
 
                 <p className="helper">
-                  Built for builders: ship usage fees, automate buybacks, publish receipts.
+                  Built for builders: ship usage fees, automate buybacks, publish
+                  receipts.
                 </p>
               </div>
             </div>
@@ -130,10 +146,9 @@ export default function Home() {
               <div className="panel-inner">
                 <div className="row" style={{ justifyContent: "space-between" }}>
                   <div>
-                    <h3 style={{ margin: 0 }}>$P402 Token</h3>
+                    <h3 style={{ margin: 0 }}>$SG Token</h3>
                     <div className="label">Ecosystem utility</div>
                   </div>
-                  <span className="badge">Launching soon</span>
                 </div>
 
                 <div className="stat-grid" style={{ marginTop: "16px" }}>
@@ -143,7 +158,7 @@ export default function Home() {
                   </div>
                   <div className="stat">
                     <b>Mechanic</b>
-                    <span>Protocol fees → $P402 buybacks (optional)</span>
+                    <span>Protocol fees → $SG buybacks (optional)</span>
                   </div>
                 </div>
 
@@ -158,14 +173,22 @@ export default function Home() {
                     onClick={(e) => e.currentTarget.select()}
                     aria-label="Contract address"
                   />
-                  <button className="button small" type="button" onClick={handleCopy}>
+                  <button
+                    className="button small"
+                    type="button"
+                    onClick={handleCopy}
+                  >
                     {copyLabel}
                   </button>
                 </div>
 
                 <div className="divider"></div>
 
-                <div className="note warn" data-reveal style={{ "--delay": "160ms" }}>
+                <div
+                  className="note warn"
+                  data-reveal
+                  style={{ "--delay": "160ms" }}
+                >
                   <b>Simple promise:</b> SolGate does not tax token transfers.
                   Fees apply only to revenue (paid requests) and can be routed
                   to automated buybacks on a schedule.
@@ -186,8 +209,8 @@ export default function Home() {
               <div className="card" data-reveal style={{ "--delay": "60ms" }}>
                 <h4>Paid APIs & Bots</h4>
                 <p>
-                  Charge <strong>HTTP 402</strong> per request and route a portion of
-                  revenue into protocol-level buybacks.
+                  Charge <strong>HTTP 402</strong> per request and route a
+                  portion of revenue into protocol-level buybacks.
                 </p>
               </div>
               <div className="card" data-reveal style={{ "--delay": "120ms" }}>
@@ -218,22 +241,49 @@ export default function Home() {
             <footer className="footer">
               <div className="divider"></div>
               <div className="social-links" data-reveal>
-                <a className="social-icon" href={LINKS.x} target="_blank" rel="noopener" aria-label="X">X</a>
+                <a
+                  className="social-icon"
+                  href={LINKS.x}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="X"
+                >
+                  X
+                </a>
                 <span className="social-sep"></span>
-                <a className="social-icon" href={LINKS.github} target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
+                <a
+                  className="social-icon"
+                  href={LINKS.github}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="GitHub"
+                >
+                  GitHub
+                </a>
                 <span className="social-sep"></span>
-                <a className="social-icon" href={LINKS.telegram} target="_blank" rel="noopener" aria-label="Telegram">Telegram</a>
+                <a
+                  className="social-icon"
+                  href={LINKS.telegram}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Telegram"
+                >
+                  Telegram
+                </a>
                 <span className="social-sep"></span>
-                <a className="social-icon" href={LINKS.docs} aria-label="Docs">Docs</a>
+                <a className="social-icon" href={LINKS.docs} aria-label="Docs">
+                  Docs
+                </a>
               </div>
 
               <div>
-                <strong>{BRAND}</strong> — {SUBLINE}. Build real revenue, route real fees,
-                publish real receipts.
+                <strong>{BRAND}</strong> — {SUBLINE}. Build real revenue, route
+                real fees, publish real receipts.
               </div>
 
               <div style={{ marginTop: "8px" }}>
-                Disclaimer: This site is informational and does not constitute financial advice.
+                Disclaimer: This site is informational and does not constitute
+                financial advice.
               </div>
             </footer>
           </div>
