@@ -38,7 +38,7 @@ const HEADER_OFFSET_PX = 96;
 
 export default function DocsPage() {
   const [tocOpen, setTocOpen] = useState(false);
-  const tocShellRef = useRef(null);
+  const rafRef = useRef(null);
 
   useEffect(() => {
     const items = document.querySelectorAll("[data-reveal]");
@@ -65,43 +65,43 @@ export default function DocsPage() {
     return () => io.disconnect();
   }, []);
 
-  // Close TOC when tapping outside (mobile UX)
+  // Close on Escape (desktop)
   useEffect(() => {
-    if (!tocOpen) return;
-
-    const onDown = (e) => {
-      const el = tocShellRef.current;
-      if (!el) return;
-      if (!el.contains(e.target)) setTocOpen(false);
+    const onKey = (e) => {
+      if (e.key === "Escape") setTocOpen(false);
     };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
-    // use capture to be consistent across mobile browsers
-    document.addEventListener("pointerdown", onDown, true);
-    return () => document.removeEventListener("pointerdown", onDown, true);
-  }, [tocOpen]);
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   const scrollToId = useCallback((id) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // Close menu first, then scroll on next frame (prevents iOS “no-op”)
+    // zavri TOC (na mobile) a až potom scroll (na ďalší frame)
     setTocOpen(false);
 
-    requestAnimationFrame(() => {
-      const rect = el.getBoundingClientRect();
-      const y = window.scrollY + rect.top - HEADER_OFFSET_PX;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const y = window.scrollY + el.getBoundingClientRect().top - HEADER_OFFSET_PX;
 
       window.scrollTo({
         top: Math.max(0, y),
         behavior: "smooth",
       });
 
-      // Keep URL in sync without triggering native jump
+      // update hash bez natívneho skoku
       history.replaceState(null, "", `#${id}`);
     });
   }, []);
 
-  const onTocClick = (id) => (e) => {
+  const onTocItem = (id) => (e) => {
     e.preventDefault();
     e.stopPropagation();
     scrollToId(id);
@@ -129,10 +129,7 @@ export default function DocsPage() {
           </div>
 
           <div className="docs-grid">
-            <aside
-              ref={tocShellRef}
-              className={`toc-shell ${tocOpen ? "open" : ""}`}
-            >
+            <aside className={`toc-shell ${tocOpen ? "open" : ""}`}>
               <button
                 className="toc-toggle"
                 type="button"
@@ -144,19 +141,24 @@ export default function DocsPage() {
                 <span className="toc-caret" aria-hidden="true" />
               </button>
 
-              <nav className="toc" id="toc" aria-label="Table of contents">
-                <a href="#what" onClick={onTocClick("what")}>
-                  What it is
-                </a>
-                <a href="#flow" onClick={onTocClick("flow")}>
-                  Fee split
-                </a>
-                <a href="#install" onClick={onTocClick("install")}>
-                  Install
-                </a>
-                <a href="#usage" onClick={onTocClick("usage")}>
-                  Usage
-                </a>
+              {/* Backdrop je realny element -> tap/click je 100% predvidatelny */}
+              <button
+                type="button"
+                className="toc-backdrop"
+                aria-label="Close sections"
+                onClick={() => setTocOpen(false)}
+              />
+
+              <nav
+                className="toc"
+                id="toc"
+                aria-label="Table of contents"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <a href="#what" onClick={onTocItem("what")}>What it is</a>
+                <a href="#flow" onClick={onTocItem("flow")}>Fee split</a>
+                <a href="#install" onClick={onTocItem("install")}>Install</a>
+                <a href="#usage" onClick={onTocItem("usage")}>Usage</a>
               </nav>
             </aside>
 
@@ -168,23 +170,17 @@ export default function DocsPage() {
 
               <article id="flow" className="doc-card" data-reveal>
                 <h3>Fee split</h3>
-                <pre>
-                  <code>{paymentSplitCode}</code>
-                </pre>
+                <pre><code>{paymentSplitCode}</code></pre>
               </article>
 
               <article id="install" className="doc-card" data-reveal>
                 <h3>Install</h3>
-                <pre>
-                  <code>{installCode}</code>
-                </pre>
+                <pre><code>{installCode}</code></pre>
               </article>
 
               <article id="usage" className="doc-card" data-reveal>
                 <h3>Usage</h3>
-                <pre>
-                  <code>{usageCode}</code>
-                </pre>
+                <pre><code>{usageCode}</code></pre>
               </article>
             </div>
           </div>
