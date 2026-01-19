@@ -34,7 +34,7 @@ app.get(
   }
 );`;
 
-const HEADER_OFFSET_PX = 96;
+const HEADER_OFFSET = 96;
 
 export default function DocsPage() {
   const [tocOpen, setTocOpen] = useState(false);
@@ -65,7 +65,7 @@ export default function DocsPage() {
     return () => io.disconnect();
   }, []);
 
-  // Close on Escape (desktop)
+  // Escape closes TOC (desktop)
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") setTocOpen(false);
@@ -80,31 +80,34 @@ export default function DocsPage() {
     };
   }, []);
 
-  const scrollToId = useCallback((id) => {
+  const goTo = useCallback((id) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // zavri TOC (na mobile) a až potom scroll (na ďalší frame)
+    // Zavri TOC (na mobile), aby sa layout ustalil
     setTocOpen(false);
 
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
+
+    // 2x rAF = istota, že sa DOM po zatvorení TOC stabilizoval (Safari fix)
     rafRef.current = requestAnimationFrame(() => {
-      const y = window.scrollY + el.getBoundingClientRect().top - HEADER_OFFSET_PX;
+      rafRef.current = requestAnimationFrame(() => {
+        const top = window.scrollY + el.getBoundingClientRect().top - HEADER_OFFSET;
 
-      window.scrollTo({
-        top: Math.max(0, y),
-        behavior: "smooth",
+        window.scrollTo({
+          top: Math.max(0, top),
+          behavior: "smooth",
+        });
+
+        history.replaceState(null, "", `#${id}`);
       });
-
-      // update hash bez natívneho skoku
-      history.replaceState(null, "", `#${id}`);
     });
   }, []);
 
-  const onTocItem = (id) => (e) => {
+  const onItem = (id) => (e) => {
     e.preventDefault();
     e.stopPropagation();
-    scrollToId(id);
+    goTo(id);
   };
 
   return (
@@ -141,7 +144,7 @@ export default function DocsPage() {
                 <span className="toc-caret" aria-hidden="true" />
               </button>
 
-              {/* Backdrop je realny element -> tap/click je 100% predvidatelny */}
+              {/* Backdrop (len na mobile cez CSS), klik zavrie menu */}
               <button
                 type="button"
                 className="toc-backdrop"
@@ -149,16 +152,11 @@ export default function DocsPage() {
                 onClick={() => setTocOpen(false)}
               />
 
-              <nav
-                className="toc"
-                id="toc"
-                aria-label="Table of contents"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <a href="#what" onClick={onTocItem("what")}>What it is</a>
-                <a href="#flow" onClick={onTocItem("flow")}>Fee split</a>
-                <a href="#install" onClick={onTocItem("install")}>Install</a>
-                <a href="#usage" onClick={onTocItem("usage")}>Usage</a>
+              <nav className="toc" id="toc" aria-label="Table of contents">
+                <a href="#what" onClick={onItem("what")}>What it is</a>
+                <a href="#flow" onClick={onItem("flow")}>Fee split</a>
+                <a href="#install" onClick={onItem("install")}>Install</a>
+                <a href="#usage" onClick={onItem("usage")}>Usage</a>
               </nav>
             </aside>
 
