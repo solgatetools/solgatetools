@@ -754,10 +754,14 @@ code {
 }
 
 /* =========================================================
-   TOC (Mobile): overlay panel to avoid layout shift (iOS fix)
+   TOC (Mobile): overlay panel (iOS clickable + no layout shift)
    ========================================================= */
 @media (max-width: 980px) {
-  /* Toggle button stays in flow */
+  /* Make stacking context deterministic on iOS */
+  .toc-shell {
+    isolation: isolate;
+  }
+
   .toc-toggle {
     display: flex;
     width: 100%;
@@ -775,25 +779,27 @@ code {
     text-align: left;
     gap: 10px;
     margin-bottom: 12px;
+    touch-action: manipulation;
   }
 
-  /* When open, create a backdrop that does NOT push content */
+  /* Backdrop (below panel) */
   .toc-shell.open::before {
     content: "";
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
-    z-index: 49;
+    z-index: 10;
+    pointer-events: auto;
   }
 
-  /* The TOC itself becomes a fixed overlay panel under the header */
+  /* TOC Panel (above backdrop) */
   .toc {
     display: none;
     position: fixed;
     left: 16px;
     right: 16px;
-    top: 96px; /* align with headerOffset */
-    z-index: 50;
+    top: 96px; /* MUST match headerOffset in docs/page.js */
+    z-index: 20;
 
     border-radius: var(--radius);
     border: 1px solid var(--border);
@@ -801,9 +807,12 @@ code {
     padding: 14px;
     box-shadow: var(--shadow);
 
-    max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+
+    pointer-events: auto;
+    touch-action: pan-y;
   }
 
   .toc-shell.open .toc {
@@ -815,6 +824,7 @@ code {
     padding: 12px 12px;
     font-size: 14px;
     border-radius: 12px;
+    touch-action: manipulation;
   }
 }
 
@@ -848,3 +858,4 @@ li {
     animation: none;
   }
 }
+
