@@ -28,7 +28,6 @@ html,
 body {
   height: 100%;
   width: 100%;
-  overflow-x: hidden;
 }
 
 body {
@@ -117,7 +116,6 @@ a:hover {
 .stack {
   display: grid;
   gap: 18px;
-  min-width: 0;
 }
 
 .row {
@@ -316,7 +314,6 @@ a:hover {
 .panel-inner {
   position: relative;
   padding: 32px;
-  min-width: 0;
 }
 
 h1 {
@@ -553,7 +550,6 @@ h1 {
   grid-template-columns: 0.8fr 1.2fr;
   gap: 18px;
   align-items: stretch;
-  min-width: 0;
 }
 
 @media (max-width: 980px) {
@@ -600,7 +596,6 @@ h1 {
   background: var(--card-2);
   padding: 20px;
   min-height: 100%;
-  min-width: 0;
 }
 
 .doc-card h3 {
@@ -626,7 +621,6 @@ pre {
   overflow: auto;
   max-width: 100%;
   -webkit-overflow-scrolling: touch;
-  min-width: 0;
 }
 
 code {
@@ -636,7 +630,6 @@ code {
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  min-width: 0;
 }
 
 .note {
@@ -856,6 +849,14 @@ code {
   }
 }
 
+/* Prevent long tokens/strings from causing horizontal scroll */
+pre,
+code {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Optional: make long words wrap in normal paragraphs */
 p,
 li {
@@ -863,11 +864,11 @@ li {
 }
 
 /* ================================
-   DOCS – TOC UI (base)
+   DOCS – MOBILE (single source of truth)
    ================================ */
+
 .toc-shell {
   position: relative;
-  min-width: 0;
 }
 
 .toc-toggle {
@@ -882,10 +883,6 @@ li {
   text-transform: uppercase;
   justify-content: space-between;
   align-items: center;
-  -webkit-appearance: none;
-  appearance: none;
-  text-align: left;
-  gap: 10px;
 }
 
 .toc-caret {
@@ -901,57 +898,25 @@ li {
   transform: rotate(-135deg);
 }
 
-/* =========================================
-   CRITICAL MOBILE FIX (Docs overflow + TOC)
-   ========================================= */
-
-/* 1) Prevent grid children from forcing overflow (key fix) */
-.docs-grid {
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-}
-
-.docs-grid > * {
-  min-width: 0;
-}
-
-/* 2) Ensure all nested blocks can shrink */
-.toc-shell,
-.stack,
-.doc-card,
-.panel,
-.panel-inner,
-pre,
-code {
-  min-width: 0;
-}
-
-/* 3) TOC toggle behavior (requires .toc-shell.open) */
 @media (max-width: 980px) {
   .toc-toggle {
     display: flex;
     margin-bottom: 12px;
   }
 
+  /* Default: TOC visible as block for usability.
+     If you implement JS toggle, you can switch to display:none and open-state show. */
   .toc {
-    display: none;
+    position: relative;
+    top: auto;
+    width: 100%;
+    margin-bottom: 14px;
   }
 
-  .toc-shell.open .toc {
-    display: block;
-  }
-}
-
-/* 4) Mobile code: WRAP lines instead of forcing horizontal overflow */
-@media (max-width: 720px) {
-  pre {
-    overflow-x: hidden;
-  }
-
-  pre code {
-    white-space: pre-wrap;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-  }
+  /* Optional toggle behavior (requires JS adding .open)
+  .toc { display: none; }
+  .toc-shell.open .toc { display: block; }
+  */
 }
 
 @media (prefers-reduced-motion: reduce) {
