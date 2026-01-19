@@ -89,18 +89,32 @@ export default function DocsPage() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [tocOpen]);
 
-  const goTo = (id) => (e) => {
-    e.preventDefault();
-    setTocOpen(false);
-
+  const scrollToId = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // Smooth + stable scroll (fixes iOS hash jump weirdness)
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Must match your CSS scroll-margin-top (or header height)
+    const headerOffset = 96;
 
-    // Keep URL updated without triggering browser jump
+    const rect = el.getBoundingClientRect();
+    const y = window.scrollY + rect.top - headerOffset;
+
+    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
     history.replaceState(null, "", `#${id}`);
+  };
+
+  const goTo = (id) => (e) => {
+    e.preventDefault();
+
+    // Close TOC first (this changes layout height), then scroll after reflow.
+    setTocOpen(false);
+
+    // Wait for React state + layout reflow (2 RAFs is the reliable pattern)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollToId(id);
+      });
+    });
   };
 
   return (
