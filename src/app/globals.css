@@ -31,11 +31,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Global anchor offset for sticky header */
-html {
-  scroll-padding-top: 96px;
-}
-
 body {
   margin: 0;
   font-family: var(--font-sans);
@@ -753,11 +748,8 @@ code {
   }
 }
 
-/* =========================================================
-   TOC (Mobile): overlay panel to avoid layout shift (iOS fix)
-   ========================================================= */
+/* TOC toggle behavior (you already have tocOpen + .toc-shell.open) */
 @media (max-width: 980px) {
-  /* Toggle button stays in flow */
   .toc-toggle {
     display: flex;
     width: 100%;
@@ -777,44 +769,12 @@ code {
     margin-bottom: 12px;
   }
 
-  /* When open, create a backdrop that does NOT push content */
-  .toc-shell.open::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 49;
-  }
-
-  /* The TOC itself becomes a fixed overlay panel under the header */
   .toc {
     display: none;
-    position: fixed;
-    left: 16px;
-    right: 16px;
-    top: 96px; /* align with headerOffset */
-    z-index: 50;
-
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: rgba(12, 16, 23, 0.98);
-    padding: 14px;
-    box-shadow: var(--shadow);
-
-    max-height: calc(100vh - 120px);
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   .toc-shell.open .toc {
     display: block;
-  }
-
-  /* More tappable items on mobile */
-  .toc a {
-    padding: 12px 12px;
-    font-size: 14px;
-    border-radius: 12px;
   }
 }
 
