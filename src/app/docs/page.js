@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const paymentSplitCode = `// Payment split math (example)
 basePrice = 0.01 USDC
@@ -34,11 +34,9 @@ app.get(
   }
 );`;
 
-const HEADER_OFFSET = 96;
-
 export default function DocsPage() {
   const [tocOpen, setTocOpen] = useState(false);
-  const rafRef = useRef(null);
+  const tocShellRef = useRef(null);
 
   useEffect(() => {
     const items = document.querySelectorAll("[data-reveal]");
@@ -65,49 +63,44 @@ export default function DocsPage() {
     return () => io.disconnect();
   }, []);
 
-  // Escape closes TOC (desktop)
+  // Close TOC when tapping outside (mobile UX)
   useEffect(() => {
-    const onKey = (e) => {
+    if (!tocOpen) return;
+
+    const onDown = (e) => {
+      const el = tocShellRef.current;
+      if (!el) return;
+      if (!el.contains(e.target)) setTocOpen(false);
+    };
+
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [tocOpen]);
+
+  // Close TOC on Escape
+  useEffect(() => {
+    if (!tocOpen) return;
+
+    const onKeyDown = (e) => {
       if (e.key === "Escape") setTocOpen(false);
     };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, []);
 
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [tocOpen]);
 
-  const goTo = useCallback((id) => {
+  const goTo = (id) => (e) => {
+    e.preventDefault();
+    setTocOpen(false);
+
     const el = document.getElementById(id);
     if (!el) return;
 
-    // Zavri TOC (na mobile), aby sa layout ustalil
-    setTocOpen(false);
+    // Smooth + stable scroll (fixes iOS hash jump weirdness)
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
 
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-
-    // 2x rAF = istota, že sa DOM po zatvorení TOC stabilizoval (Safari fix)
-    rafRef.current = requestAnimationFrame(() => {
-      rafRef.current = requestAnimationFrame(() => {
-        const top = window.scrollY + el.getBoundingClientRect().top - HEADER_OFFSET;
-
-        window.scrollTo({
-          top: Math.max(0, top),
-          behavior: "smooth",
-        });
-
-        history.replaceState(null, "", `#${id}`);
-      });
-    });
-  }, []);
-
-  const onItem = (id) => (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    goTo(id);
+    // Keep URL updated without triggering browser jump
+    history.replaceState(null, "", `#${id}`);
   };
 
   return (
@@ -132,7 +125,10 @@ export default function DocsPage() {
           </div>
 
           <div className="docs-grid">
-            <aside className={`toc-shell ${tocOpen ? "open" : ""}`}>
+            <aside
+              ref={tocShellRef}
+              className={`toc-shell ${tocOpen ? "open" : ""}`}
+            >
               <button
                 className="toc-toggle"
                 type="button"
@@ -144,41 +140,47 @@ export default function DocsPage() {
                 <span className="toc-caret" aria-hidden="true" />
               </button>
 
-              {/* Backdrop (len na mobile cez CSS), klik zavrie menu */}
-              <button
-                type="button"
-                className="toc-backdrop"
-                aria-label="Close sections"
-                onClick={() => setTocOpen(false)}
-              />
-
               <nav className="toc" id="toc" aria-label="Table of contents">
-                <a href="#what" onClick={onItem("what")}>What it is</a>
-                <a href="#flow" onClick={onItem("flow")}>Fee split</a>
-                <a href="#install" onClick={onItem("install")}>Install</a>
-                <a href="#usage" onClick={onItem("usage")}>Usage</a>
+                <a href="#what" onClick={goTo("what")}>
+                  What it is
+                </a>
+                <a href="#flow" onClick={goTo("flow")}>
+                  Fee split
+                </a>
+                <a href="#install" onClick={goTo("install")}>
+                  Install
+                </a>
+                <a href="#usage" onClick={goTo("usage")}>
+                  Usage
+                </a>
               </nav>
             </aside>
 
             <div className="stack">
-              <article id="what" className="doc-card" data-reveal>
+              <article id="what" className="doc-card">
                 <h3>What is SolGate?</h3>
                 <p>SolGate converts paid usage into programmable buybacks.</p>
               </article>
 
-              <article id="flow" className="doc-card" data-reveal>
+              <article id="flow" className="doc-card">
                 <h3>Fee split</h3>
-                <pre><code>{paymentSplitCode}</code></pre>
+                <pre>
+                  <code>{paymentSplitCode}</code>
+                </pre>
               </article>
 
-              <article id="install" className="doc-card" data-reveal>
+              <article id="install" className="doc-card">
                 <h3>Install</h3>
-                <pre><code>{installCode}</code></pre>
+                <pre>
+                  <code>{installCode}</code>
+                </pre>
               </article>
 
-              <article id="usage" className="doc-card" data-reveal>
+              <article id="usage" className="doc-card">
                 <h3>Usage</h3>
-                <pre><code>{usageCode}</code></pre>
+                <pre>
+                  <code>{usageCode}</code>
+                </pre>
               </article>
             </div>
           </div>
