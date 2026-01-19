@@ -67,14 +67,16 @@ export default function Home() {
         <div className="container header-inner">
           <a className="logo" href="#top">
             <div className="logo-mark" aria-hidden="true"></div>
-            <div>
+            <div className="logo-text">
               <div>{BRAND}</div>
-              <small>{SUBLINE}</small>
+              <small className="subline">{SUBLINE}</small>
             </div>
           </a>
 
           <nav className="nav">
-            <a href={LINKS.docs}>Docs</a>
+            <a className="nav-docs" href={LINKS.docs}>
+              Docs
+            </a>
             <div className="nav-icons">
               <a
                 className="icon-button"
@@ -95,7 +97,7 @@ export default function Home() {
                 aria-label="GitHub"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-3 .7-3.6-1.3-3.6-1.3-.5-1.2-1.1-1.5-1.1-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 1.5-.8 1.7-1.1.1-.7.4-1.1.7-1.4-2.4-.3-4.9-1.2-4.9-5.4 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.3 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.8 1.1 3 0 4.2-2.5 5.1-4.9 5.4.4.3.7 1 .7 2v3c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" />
+                  <path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-3 .7-3.6-1.3-3.6-1.3-.5-1.2-1.1-1.5-1.1-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.7 1 .1 1.5-.8 1.7-1.1.1-.7.4-1.1.7-1.4-2.4-.3-4.9-1.2-4.9-5.4 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.3 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.8 1.1 3 0 4.2-2.5 5.1-4.9 5.4.4.3.7 1 .7 2v3c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" />
                 </svg>
               </a>
             </div>
@@ -240,7 +242,6 @@ export default function Home() {
             <footer className="footer">
               <div className="divider"></div>
 
-              {/* FOOTER: ikonky namiesto textu */}
               <div className="social-links" data-reveal>
                 <a
                   className="social-icon"
@@ -272,7 +273,12 @@ export default function Home() {
 
                 <span className="social-sep" aria-hidden="true"></span>
 
-                <a className="social-icon" href={LINKS.docs} aria-label="Docs" title="Docs">
+                <a
+                  className="social-icon"
+                  href={LINKS.docs}
+                  aria-label="Docs"
+                  title="Docs"
+                >
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M6 2h8l4 4v16H6V2Zm8 1.5V7h3.5L14 3.5ZM8.5 10h7v1.6h-7V10Zm0 4h7v1.6h-7V14Zm0 4h5.5v1.6H8.5V18Z" />
                   </svg>
