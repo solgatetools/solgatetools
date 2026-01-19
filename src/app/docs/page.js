@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const paymentSplitCode = `// Payment split math (example)
 basePrice = 0.01 USDC
@@ -36,9 +36,17 @@ app.get(
 
 export default function DocsPage() {
   const [tocOpen, setTocOpen] = useState(false);
+  const tocShellRef = useRef(null);
 
   useEffect(() => {
     const items = document.querySelectorAll("[data-reveal]");
+    if (!items.length) return;
+
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((item) => item.classList.add("in-view"));
+      return;
+    }
+
     const io = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((e) => {
@@ -50,19 +58,34 @@ export default function DocsPage() {
       },
       { threshold: 0.2 }
     );
+
     items.forEach((i) => io.observe(i));
     return () => io.disconnect();
   }, []);
+
+  // Close TOC when tapping outside (mobile UX)
+  useEffect(() => {
+    if (!tocOpen) return;
+
+    const onDown = (e) => {
+      const el = tocShellRef.current;
+      if (!el) return;
+      if (!el.contains(e.target)) setTocOpen(false);
+    };
+
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [tocOpen]);
 
   return (
     <div className="app-shell">
       <header className="site-header">
         <div className="container header-inner">
           <a className="logo" href="/">
-            <div className="logo-mark" />
-            <div>
+            <div className="logo-mark" aria-hidden="true" />
+            <div className="logo-text">
               <div>SolGate</div>
-              <small>Usage → Buybacks</small>
+              <small className="subline">Usage → Buybacks</small>
             </div>
           </a>
         </div>
@@ -76,17 +99,34 @@ export default function DocsPage() {
           </div>
 
           <div className="docs-grid">
-            <aside className={`toc-shell ${tocOpen ? "open" : ""}`}>
-              <button className="toc-toggle" onClick={() => setTocOpen(!tocOpen)}>
+            <aside
+              ref={tocShellRef}
+              className={`toc-shell ${tocOpen ? "open" : ""}`}
+            >
+              <button
+                className="toc-toggle"
+                type="button"
+                aria-expanded={tocOpen}
+                aria-controls="toc"
+                onClick={() => setTocOpen((v) => !v)}
+              >
                 {tocOpen ? "Hide sections" : "Show sections"}
-                <span className="toc-caret" />
+                <span className="toc-caret" aria-hidden="true" />
               </button>
 
-              <nav className="toc">
-                <a href="#what" onClick={() => setTocOpen(false)}>What it is</a>
-                <a href="#flow" onClick={() => setTocOpen(false)}>Fee split</a>
-                <a href="#install" onClick={() => setTocOpen(false)}>Install</a>
-                <a href="#usage" onClick={() => setTocOpen(false)}>Usage</a>
+              <nav className="toc" id="toc" aria-label="Table of contents">
+                <a href="#what" onClick={() => setTocOpen(false)}>
+                  What it is
+                </a>
+                <a href="#flow" onClick={() => setTocOpen(false)}>
+                  Fee split
+                </a>
+                <a href="#install" onClick={() => setTocOpen(false)}>
+                  Install
+                </a>
+                <a href="#usage" onClick={() => setTocOpen(false)}>
+                  Usage
+                </a>
               </nav>
             </aside>
 
@@ -98,17 +138,23 @@ export default function DocsPage() {
 
               <article id="flow" className="doc-card">
                 <h3>Fee split</h3>
-                <pre><code>{paymentSplitCode}</code></pre>
+                <pre>
+                  <code>{paymentSplitCode}</code>
+                </pre>
               </article>
 
               <article id="install" className="doc-card">
                 <h3>Install</h3>
-                <pre><code>{installCode}</code></pre>
+                <pre>
+                  <code>{installCode}</code>
+                </pre>
               </article>
 
               <article id="usage" className="doc-card">
                 <h3>Usage</h3>
-                <pre><code>{usageCode}</code></pre>
+                <pre>
+                  <code>{usageCode}</code>
+                </pre>
               </article>
             </div>
           </div>
