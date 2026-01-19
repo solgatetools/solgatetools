@@ -89,11 +89,32 @@ export default function DocsPage() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [tocOpen]);
 
-  // Let the browser do the hash scroll (most stable on iOS).
-  // Only close TOC after the jump so layout doesn't shift mid-scroll.
-  const closeAfterJump = () => {
-    if (!tocOpen) return;
-    window.setTimeout(() => setTocOpen(false), 60);
+  const jumpTo = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // must match CSS scroll-padding-top / scroll-margin-top
+    const headerOffset = 96;
+
+    const y = window.scrollY + el.getBoundingClientRect().top - headerOffset;
+
+    // IMPORTANT: use auto (not smooth) for iOS stability
+    window.scrollTo({ top: Math.max(0, y), behavior: "auto" });
+    history.replaceState(null, "", `#${id}`);
+  };
+
+  const onTocItem = (id) => (e) => {
+    // When TOC is open, prevent native hash jump (it breaks after collapse)
+    if (tocOpen) e.preventDefault();
+
+    // Close first (layout changes), then scroll after reflow
+    setTocOpen(false);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        jumpTo(id);
+      });
+    });
   };
 
   return (
@@ -134,16 +155,16 @@ export default function DocsPage() {
               </button>
 
               <nav className="toc" id="toc" aria-label="Table of contents">
-                <a href="#what" onClick={closeAfterJump}>
+                <a href="#what" onClick={onTocItem("what")}>
                   What it is
                 </a>
-                <a href="#flow" onClick={closeAfterJump}>
+                <a href="#flow" onClick={onTocItem("flow")}>
                   Fee split
                 </a>
-                <a href="#install" onClick={closeAfterJump}>
+                <a href="#install" onClick={onTocItem("install")}>
                   Install
                 </a>
-                <a href="#usage" onClick={closeAfterJump}>
+                <a href="#usage" onClick={onTocItem("usage")}>
                   Usage
                 </a>
               </nav>
