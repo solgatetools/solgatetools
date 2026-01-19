@@ -77,6 +77,32 @@ export default function DocsPage() {
     return () => document.removeEventListener("pointerdown", onDown);
   }, [tocOpen]);
 
+  // Close TOC on Escape
+  useEffect(() => {
+    if (!tocOpen) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setTocOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [tocOpen]);
+
+  const goTo = (id) => (e) => {
+    e.preventDefault();
+    setTocOpen(false);
+
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // Smooth + stable scroll (fixes iOS hash jump weirdness)
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Keep URL updated without triggering browser jump
+    history.replaceState(null, "", `#${id}`);
+  };
+
   return (
     <div className="app-shell">
       <header className="site-header">
@@ -115,16 +141,16 @@ export default function DocsPage() {
               </button>
 
               <nav className="toc" id="toc" aria-label="Table of contents">
-                <a href="#what" onClick={() => setTocOpen(false)}>
+                <a href="#what" onClick={goTo("what")}>
                   What it is
                 </a>
-                <a href="#flow" onClick={() => setTocOpen(false)}>
+                <a href="#flow" onClick={goTo("flow")}>
                   Fee split
                 </a>
-                <a href="#install" onClick={() => setTocOpen(false)}>
+                <a href="#install" onClick={goTo("install")}>
                   Install
                 </a>
-                <a href="#usage" onClick={() => setTocOpen(false)}>
+                <a href="#usage" onClick={goTo("usage")}>
                   Usage
                 </a>
               </nav>
