@@ -28,6 +28,7 @@ html,
 body {
   height: 100%;
   width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -116,6 +117,7 @@ a:hover {
 .stack {
   display: grid;
   gap: 18px;
+  min-width: 0;
 }
 
 .row {
@@ -314,6 +316,7 @@ a:hover {
 .panel-inner {
   position: relative;
   padding: 32px;
+  min-width: 0;
 }
 
 h1 {
@@ -365,11 +368,6 @@ h1 {
     rgba(96, 165, 250, 0.12)
   );
   box-shadow: 0 16px 40px rgba(94, 234, 212, 0.16);
-}
-
-.button.ghost {
-  border-color: rgba(250, 204, 21, 0.4);
-  color: rgba(255, 236, 179, 0.9);
 }
 
 .button.small {
@@ -477,85 +475,28 @@ h1 {
   font-size: 13px;
 }
 
-/* Token stats */
-.stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-@media (max-width: 520px) {
-  .stat-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.stat {
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 14px;
-  padding: 12px;
-}
-
-.stat b {
-  display: block;
-  font-size: 11px;
-  color: var(--muted-2);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.stat span {
-  display: block;
-  margin-top: 6px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.86);
-}
-
-/* Copy field */
-.copy-field {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 14px;
-  padding: 8px 10px;
-  min-width: 0;
-}
-
-.copy-field input {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.86);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  min-width: 0;
-}
-
-.copy-help {
-  margin-top: 8px;
-  color: var(--muted-2);
-  font-size: 12px;
-  line-height: 1.4;
-}
-
 /* Docs layout */
 .docs-grid {
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
   gap: 18px;
   align-items: stretch;
+  min-width: 0;
+}
+
+.docs-grid > * {
+  min-width: 0;
 }
 
 @media (max-width: 980px) {
   .docs-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.toc-shell {
+  position: relative;
+  min-width: 0;
 }
 
 .toc {
@@ -566,6 +507,7 @@ h1 {
   background: var(--card-2);
   padding: 16px;
   height: fit-content;
+  min-width: 0;
 }
 
 @media (max-width: 980px) {
@@ -595,7 +537,7 @@ h1 {
   border: 1px solid var(--border);
   background: var(--card-2);
   padding: 20px;
-  min-height: 100%;
+  min-width: 0;
 }
 
 .doc-card h3 {
@@ -621,17 +563,17 @@ pre {
   overflow: auto;
   max-width: 100%;
   -webkit-overflow-scrolling: touch;
+  min-width: 0;
 }
 
 code {
   font-family: var(--font-mono);
   font-size: 12px;
   color: rgba(255, 255, 255, 0.9);
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  min-width: 0;
 }
 
+/* Notes */
 .note {
   border-left: 3px solid rgba(94, 234, 212, 0.55);
   padding: 10px 12px;
@@ -653,25 +595,6 @@ code {
   border-top: 1px solid var(--border);
   margin-top: 18px;
   color: var(--muted-2);
-  font-size: 12px;
-}
-
-.chips {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.78);
   font-size: 12px;
 }
 
@@ -701,11 +624,6 @@ code {
   fill: currentColor;
 }
 
-.social-icon:hover {
-  border-color: var(--border-strong);
-  background: rgba(255, 255, 255, 0.07);
-}
-
 .social-sep {
   width: 1px;
   height: 24px;
@@ -719,9 +637,8 @@ code {
   margin: 16px 0;
 }
 
-/* ===== Mobile + tablet system (single, consistent) ===== */
+/* ===== Mobile + tablet ===== */
 @media (max-width: 720px) {
-  /* Keep header compact (no column stacking) */
   .header-inner {
     flex-direction: row;
     align-items: center;
@@ -731,11 +648,6 @@ code {
 
   .subline {
     display: none;
-  }
-
-  .nav {
-    width: auto;
-    justify-content: flex-end;
   }
 
   .hero {
@@ -754,7 +666,6 @@ code {
     width: 100%;
   }
 
-  /* CTA full-width on mobile */
   .button {
     width: 100%;
     justify-content: center;
@@ -770,18 +681,6 @@ code {
     gap: 6px;
   }
 
-  .grid-3 {
-    gap: 14px;
-  }
-
-  .card {
-    padding: 18px;
-  }
-
-  .toc {
-    padding: 14px;
-  }
-
   .doc-card {
     padding: 18px;
   }
@@ -789,9 +688,19 @@ code {
   pre {
     padding: 14px;
   }
+
+  /* Mobile code: wrap instead of pushing layout */
+  pre {
+    overflow-x: hidden;
+  }
+
+  pre code {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
 }
 
-/* --- Mobile polish (small devices) --- */
 @media (max-width: 480px) {
   .container {
     padding: 0 16px;
@@ -805,16 +714,6 @@ code {
     width: 32px;
     height: 32px;
     border-radius: 10px;
-  }
-
-  .nav a {
-    padding: 6px 8px;
-    font-size: 11px;
-  }
-
-  .icon-button {
-    width: 36px;
-    height: 36px;
   }
 
   h1 {
@@ -831,58 +730,39 @@ code {
     padding: 18px;
   }
 
-  /* Contract address input + button stacked */
-  .copy-field {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .button.small {
-    width: 100%;
-    justify-content: center;
-  }
-
-  /* Footer socials: remove separators on tiny screens */
   .social-sep {
     display: none;
   }
 }
 
-/* Prevent long tokens/strings from causing horizontal scroll */
-pre,
-code {
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
+/* TOC toggle behavior (you already have tocOpen + .toc-shell.open) */
+@media (max-width: 980px) {
+  .toc-toggle {
+    display: flex;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--foreground);
+    font-size: 12px;
+    text-transform: uppercase;
+    justify-content: space-between;
+    align-items: center;
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: left;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
 
-/* Optional: make long words wrap in normal paragraphs */
-p,
-li {
-  overflow-wrap: anywhere;
-}
+  .toc {
+    display: none;
+  }
 
-/* ================================
-   DOCS – MOBILE (single source of truth)
-   ================================ */
-
-.toc-shell {
-  position: relative;
-}
-
-.toc-toggle {
-  display: none;
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--foreground);
-  font-size: 12px;
-  text-transform: uppercase;
-  justify-content: space-between;
-  align-items: center;
+  .toc-shell.open .toc {
+    display: block;
+  }
 }
 
 .toc-caret {
@@ -898,25 +778,10 @@ li {
   transform: rotate(-135deg);
 }
 
-@media (max-width: 980px) {
-  .toc-toggle {
-    display: flex;
-    margin-bottom: 12px;
-  }
-
-  /* Default: TOC visible as block for usability.
-     If you implement JS toggle, you can switch to display:none and open-state show. */
-  .toc {
-    position: relative;
-    top: auto;
-    width: 100%;
-    margin-bottom: 14px;
-  }
-
-  /* Optional toggle behavior (requires JS adding .open)
-  .toc { display: none; }
-  .toc-shell.open .toc { display: block; }
-  */
+/* Optional: wrap long words in text */
+p,
+li {
+  overflow-wrap: anywhere;
 }
 
 @media (prefers-reduced-motion: reduce) {
