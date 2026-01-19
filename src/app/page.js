@@ -239,6 +239,8 @@ export default function Home() {
 
             <footer className="footer">
               <div className="divider"></div>
+
+              {/* FOOTER: ikonky namiesto textu */}
               <div className="social-links" data-reveal>
                 <a
                   className="social-icon"
@@ -246,22 +248,34 @@ export default function Home() {
                   target="_blank"
                   rel="noopener"
                   aria-label="X"
+                  title="X"
                 >
-                  X
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18.9 2h3.6l-7.9 9 9.3 11h-7.3l-5.7-6.9L4.8 22H1.2l8.5-9.6L.8 2h7.5l5.1 6.2L18.9 2Zm-1.3 18h2L7.3 4H5.1l12.5 16Z" />
+                  </svg>
                 </a>
-                <span className="social-sep"></span>
+
+                <span className="social-sep" aria-hidden="true"></span>
+
                 <a
                   className="social-icon"
                   href={LINKS.github}
                   target="_blank"
                   rel="noopener"
                   aria-label="GitHub"
+                  title="GitHub"
                 >
-                  GitHub
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-3 .7-3.6-1.3-3.6-1.3-.5-1.2-1.1-1.5-1.1-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.7 1 .1 1.5-.8 1.7-1.1.1-.7.4-1.1.7-1.4-2.4-.3-4.9-1.2-4.9-5.4 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.3 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.8 1.1 3 0 4.2-2.5 5.1-4.9 5.4.4.3.7 1 .7 2v3c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" />
+                  </svg>
                 </a>
-                <span className="social-sep"></span>
-                <a className="social-icon" href={LINKS.docs} aria-label="Docs">
-                  Docs
+
+                <span className="social-sep" aria-hidden="true"></span>
+
+                <a className="social-icon" href={LINKS.docs} aria-label="Docs" title="Docs">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 2h8l4 4v16H6V2Zm8 1.5V7h3.5L14 3.5ZM8.5 10h7v1.6h-7V10Zm0 4h7v1.6h-7V14Zm0 4h5.5v1.6H8.5V18Z" />
+                  </svg>
                 </a>
               </div>
 
