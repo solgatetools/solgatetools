@@ -112,6 +112,7 @@ a:hover {
   padding: 0 20px;
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 
 .stack {
@@ -125,6 +126,7 @@ a:hover {
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 [data-reveal] {
@@ -157,6 +159,7 @@ a:hover {
   justify-content: space-between;
   gap: 16px;
   padding: 18px 0;
+  min-width: 0;
 }
 
 .logo {
@@ -200,6 +203,7 @@ a:hover {
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-end;
+  min-width: 0;
 }
 
 .nav a {
@@ -538,6 +542,9 @@ h1 {
   background: var(--card-2);
   padding: 20px;
   min-width: 0;
+
+  /* Key: anchors won't hide behind sticky header */
+  scroll-margin-top: 96px;
 }
 
 .doc-card h3 {
@@ -571,6 +578,12 @@ code {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.9);
   min-width: 0;
+}
+
+/* Never allow code/pre to force page overflow */
+pre,
+code {
+  max-width: 100%;
 }
 
 /* Notes */
