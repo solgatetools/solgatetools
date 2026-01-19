@@ -17,11 +17,27 @@ export const metadata = {
     "SolGate is a programmable HTTP 402 payment layer that routes usage fees into automated buybacks, turning real usage into buy pressure.",
 };
 
+/**
+ * Next.js App Router viewport config (mobile correctness + iOS safe area support)
+ */
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${sora.variable} ${jetbrainsMono.variable}`}>
-        {children}
+        <div
+          style={{
+            paddingTop: "env(safe-area-inset-top)",
+            paddingBottom: "env(safe-area-inset-bottom)",
+          }}
+        >
+          {children}
+        </div>
       </body>
     </html>
   );
