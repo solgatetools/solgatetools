@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 const paymentSplitCode = `// Payment split math (example)
 basePrice = 0.01 USDC
@@ -33,6 +33,8 @@ app.get(
     res.json({ ok: true });
   }
 );`;
+
+const HEADER_OFFSET_PX = 96;
 
 export default function DocsPage() {
   const [tocOpen, setTocOpen] = useState(false);
@@ -73,48 +75,36 @@ export default function DocsPage() {
       if (!el.contains(e.target)) setTocOpen(false);
     };
 
-    document.addEventListener("pointerdown", onDown);
-    return () => document.removeEventListener("pointerdown", onDown);
+    // use capture to be consistent across mobile browsers
+    document.addEventListener("pointerdown", onDown, true);
+    return () => document.removeEventListener("pointerdown", onDown, true);
   }, [tocOpen]);
 
-  // Close TOC on Escape
-  useEffect(() => {
-    if (!tocOpen) return;
-
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") setTocOpen(false);
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [tocOpen]);
-
-  const jumpTo = (id) => {
+  const scrollToId = useCallback((id) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // must match CSS scroll-padding-top / scroll-margin-top
-    const headerOffset = 96;
-
-    const y = window.scrollY + el.getBoundingClientRect().top - headerOffset;
-
-    // IMPORTANT: use auto (not smooth) for iOS stability
-    window.scrollTo({ top: Math.max(0, y), behavior: "auto" });
-    history.replaceState(null, "", `#${id}`);
-  };
-
-  const onTocItem = (id) => (e) => {
-    // When TOC is open, prevent native hash jump (it breaks after collapse)
-    if (tocOpen) e.preventDefault();
-
-    // Close first (layout changes), then scroll after reflow
+    // Close menu first, then scroll on next frame (prevents iOS “no-op”)
     setTocOpen(false);
 
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        jumpTo(id);
+      const rect = el.getBoundingClientRect();
+      const y = window.scrollY + rect.top - HEADER_OFFSET_PX;
+
+      window.scrollTo({
+        top: Math.max(0, y),
+        behavior: "smooth",
       });
+
+      // Keep URL in sync without triggering native jump
+      history.replaceState(null, "", `#${id}`);
     });
+  }, []);
+
+  const onTocClick = (id) => (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    scrollToId(id);
   };
 
   return (
@@ -155,42 +145,42 @@ export default function DocsPage() {
               </button>
 
               <nav className="toc" id="toc" aria-label="Table of contents">
-                <a href="#what" onClick={onTocItem("what")}>
+                <a href="#what" onClick={onTocClick("what")}>
                   What it is
                 </a>
-                <a href="#flow" onClick={onTocItem("flow")}>
+                <a href="#flow" onClick={onTocClick("flow")}>
                   Fee split
                 </a>
-                <a href="#install" onClick={onTocItem("install")}>
+                <a href="#install" onClick={onTocClick("install")}>
                   Install
                 </a>
-                <a href="#usage" onClick={onTocItem("usage")}>
+                <a href="#usage" onClick={onTocClick("usage")}>
                   Usage
                 </a>
               </nav>
             </aside>
 
             <div className="stack">
-              <article id="what" className="doc-card">
+              <article id="what" className="doc-card" data-reveal>
                 <h3>What is SolGate?</h3>
                 <p>SolGate converts paid usage into programmable buybacks.</p>
               </article>
 
-              <article id="flow" className="doc-card">
+              <article id="flow" className="doc-card" data-reveal>
                 <h3>Fee split</h3>
                 <pre>
                   <code>{paymentSplitCode}</code>
                 </pre>
               </article>
 
-              <article id="install" className="doc-card">
+              <article id="install" className="doc-card" data-reveal>
                 <h3>Install</h3>
                 <pre>
                   <code>{installCode}</code>
                 </pre>
               </article>
 
-              <article id="usage" className="doc-card">
+              <article id="usage" className="doc-card" data-reveal>
                 <h3>Usage</h3>
                 <pre>
                   <code>{usageCode}</code>
