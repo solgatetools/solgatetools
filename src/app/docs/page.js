@@ -65,46 +65,39 @@ export default function DocsPage() {
     return () => io.disconnect();
   }, []);
 
-  // Close TOC when tapping outside (mobile UX)
+  // Close TOC on Escape (desktop)
   useEffect(() => {
     if (!tocOpen) return;
 
-    const onDown = (e) => {
-      const el = tocShellRef.current;
-      if (!el) return;
-      if (!el.contains(e.target)) setTocOpen(false);
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setTocOpen(false);
     };
 
-    // use capture to be consistent across mobile browsers
-    document.addEventListener("pointerdown", onDown, true);
-    return () => document.removeEventListener("pointerdown", onDown, true);
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [tocOpen]);
 
-  const scrollToId = useCallback((id) => {
+  const jumpTo = useCallback((id) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // Close menu first, then scroll on next frame (prevents iOS “no-op”)
+    // Close first to avoid iOS layout weirdness, then scroll next frame.
     setTocOpen(false);
 
     requestAnimationFrame(() => {
-      const rect = el.getBoundingClientRect();
-      const y = window.scrollY + rect.top - HEADER_OFFSET_PX;
+      const y =
+        window.scrollY + el.getBoundingClientRect().top - HEADER_OFFSET_PX;
 
-      window.scrollTo({
-        top: Math.max(0, y),
-        behavior: "smooth",
-      });
-
-      // Keep URL in sync without triggering native jump
+      // Use auto for maximum iOS reliability (smooth can be flaky in overlays)
+      window.scrollTo({ top: Math.max(0, y), behavior: "auto" });
       history.replaceState(null, "", `#${id}`);
     });
   }, []);
 
-  const onTocClick = (id) => (e) => {
+  const onTocItem = (id) => (e) => {
     e.preventDefault();
     e.stopPropagation();
-    scrollToId(id);
+    jumpTo(id);
   };
 
   return (
@@ -144,17 +137,23 @@ export default function DocsPage() {
                 <span className="toc-caret" aria-hidden="true" />
               </button>
 
-              <nav className="toc" id="toc" aria-label="Table of contents">
-                <a href="#what" onClick={onTocClick("what")}>
+              <nav
+                className="toc"
+                id="toc"
+                aria-label="Table of contents"
+                // Prevent any parent handlers from interfering with taps
+                onPointerDown={(e) => e.stopPropagation()}
+              >
+                <a href="#what" onPointerUp={onTocItem("what")} onClick={onTocItem("what")}>
                   What it is
                 </a>
-                <a href="#flow" onClick={onTocClick("flow")}>
+                <a href="#flow" onPointerUp={onTocItem("flow")} onClick={onTocItem("flow")}>
                   Fee split
                 </a>
-                <a href="#install" onClick={onTocClick("install")}>
+                <a href="#install" onPointerUp={onTocItem("install")} onClick={onTocItem("install")}>
                   Install
                 </a>
-                <a href="#usage" onClick={onTocClick("usage")}>
+                <a href="#usage" onPointerUp={onTocItem("usage")} onClick={onTocItem("usage")}>
                   Usage
                 </a>
               </nav>
