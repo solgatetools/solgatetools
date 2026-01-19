@@ -89,32 +89,11 @@ export default function DocsPage() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [tocOpen]);
 
-  const scrollToId = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    // Must match your CSS scroll-margin-top (or header height)
-    const headerOffset = 96;
-
-    const rect = el.getBoundingClientRect();
-    const y = window.scrollY + rect.top - headerOffset;
-
-    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
-    history.replaceState(null, "", `#${id}`);
-  };
-
-  const goTo = (id) => (e) => {
-    e.preventDefault();
-
-    // Close TOC first (this changes layout height), then scroll after reflow.
-    setTocOpen(false);
-
-    // Wait for React state + layout reflow (2 RAFs is the reliable pattern)
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollToId(id);
-      });
-    });
+  // Let the browser do the hash scroll (most stable on iOS).
+  // Only close TOC after the jump so layout doesn't shift mid-scroll.
+  const closeAfterJump = () => {
+    if (!tocOpen) return;
+    window.setTimeout(() => setTocOpen(false), 60);
   };
 
   return (
@@ -155,16 +134,16 @@ export default function DocsPage() {
               </button>
 
               <nav className="toc" id="toc" aria-label="Table of contents">
-                <a href="#what" onClick={goTo("what")}>
+                <a href="#what" onClick={closeAfterJump}>
                   What it is
                 </a>
-                <a href="#flow" onClick={goTo("flow")}>
+                <a href="#flow" onClick={closeAfterJump}>
                   Fee split
                 </a>
-                <a href="#install" onClick={goTo("install")}>
+                <a href="#install" onClick={closeAfterJump}>
                   Install
                 </a>
-                <a href="#usage" onClick={goTo("usage")}>
+                <a href="#usage" onClick={closeAfterJump}>
                   Usage
                 </a>
               </nav>
