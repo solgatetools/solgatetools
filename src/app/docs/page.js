@@ -34,6 +34,36 @@ app.get(
   }
 );`;
 
+const configCode = `type SolGateConfig = {
+  merchant: {
+    address: string;     // merchant destination address
+    priceUSDC: number;   // base price per request
+  };
+  fee: {
+    bps: number;         // basis points (e.g. 50 = 0.50%)
+    destination: string; // buyback vault / treasury address
+  };
+};
+
+// Example
+solgate({
+  merchant: {
+    address: "MERCHANT_WALLET",
+    priceUSDC: 0.01
+  },
+  fee: {
+    bps: 50,
+    destination: "BUYBACK_VAULT_WALLET"
+  }
+});`;
+
+const vaultCode = `// buyback-bot pseudocode
+// 1) read vault USDC balance
+// 2) if balance >= MIN_SWAP:
+//    - swap USDC -> target token via DEX aggregator
+//    - send bought tokens to burn/treasury
+// 3) log tx hash + amount for receipts`;
+
 export default function DocsPage() {
   const [tocOpen, setTocOpen] = useState(false);
   const tocShellRef = useRef(null);
@@ -96,19 +126,18 @@ export default function DocsPage() {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // Smooth + stable scroll (fixes iOS hash jump weirdness)
     el.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    // Keep URL updated without triggering browser jump
     history.replaceState(null, "", `#${id}`);
   };
 
   return (
     <div className="app-shell">
+      <div className="bg-grid" aria-hidden="true"></div>
+
       <header className="site-header">
         <div className="container header-inner">
           <a className="logo" href="/">
-            <div className="logo-mark" aria-hidden="true" />
+            <div className="logo-mark" aria-hidden="true"></div>
             <div className="logo-text">
               <div>SolGate</div>
               <small className="subline">Usage → Buybacks</small>
@@ -153,34 +182,112 @@ export default function DocsPage() {
                 <a href="#usage" onClick={goTo("usage")}>
                   Usage
                 </a>
+                <a href="#config" onClick={goTo("config")}>
+                  Config reference
+                </a>
+                <a href="#vault" onClick={goTo("vault")}>
+                  Buyback vault
+                </a>
+                <a href="#security" onClick={goTo("security")}>
+                  Security notes
+                </a>
+                <a href="#faq" onClick={goTo("faq")}>
+                  FAQ
+                </a>
               </nav>
             </aside>
 
             <div className="stack">
-              <article id="what" className="doc-card">
+              <article id="what" className="doc-card" data-reveal>
                 <h3>What is SolGate?</h3>
-                <p>SolGate converts paid usage into programmable buybacks.</p>
+                <p>
+                  SolGate is a minimal HTTP 402 payment layer. Add a configurable
+                  fee on every paid request and route it into a buyback vault —
+                  converting real usage into real buy pressure.
+                </p>
               </article>
 
-              <article id="flow" className="doc-card">
+              <article id="flow" className="doc-card" data-reveal>
                 <h3>Fee split</h3>
                 <pre>
                   <code>{paymentSplitCode}</code>
                 </pre>
               </article>
 
-              <article id="install" className="doc-card">
+              <article id="install" className="doc-card" data-reveal>
                 <h3>Install</h3>
                 <pre>
                   <code>{installCode}</code>
                 </pre>
               </article>
 
-              <article id="usage" className="doc-card">
+              <article id="usage" className="doc-card" data-reveal>
                 <h3>Usage</h3>
                 <pre>
                   <code>{usageCode}</code>
                 </pre>
+              </article>
+
+              <article id="config" className="doc-card" data-reveal>
+                <h3>Config reference</h3>
+                <p>Minimal config you need to run SolGate.</p>
+                <pre>
+                  <code>{configCode}</code>
+                </pre>
+              </article>
+
+              <article id="vault" className="doc-card" data-reveal>
+                <h3>Buyback vault</h3>
+                <p>
+                  SolGate routes fee revenue to a vault address. Buybacks can be
+                  run on a schedule (cron) or manually — publish receipts either
+                  way.
+                </p>
+                <pre>
+                  <code>{vaultCode}</code>
+                </pre>
+              </article>
+
+              <article id="security" className="doc-card" data-reveal>
+                <h3>Security notes</h3>
+                <ul
+                  style={{
+                    margin: 0,
+                    color: "var(--muted)",
+                    lineHeight: 1.6,
+                    fontSize: "13px",
+                    paddingLeft: "18px",
+                  }}
+                >
+                  <li>Use a dedicated vault wallet per project.</li>
+                  <li>Log every buyback transaction publicly (tx hash, amounts).</li>
+                  <li>Set minimum swap thresholds to avoid dust swaps.</li>
+                  <li>
+                    Do not promise “guaranteed profits.” Focus on fee routing and
+                    transparent receipts.
+                  </li>
+                </ul>
+              </article>
+
+              <article id="faq" className="doc-card" data-reveal>
+                <h3>FAQ</h3>
+                <p>
+                  <strong>Does this create sell pressure?</strong>
+                  <br />
+                  No transfer taxes. Fees come from paid usage, then can be
+                  swapped into buybacks.
+                </p>
+                <p>
+                  <strong>Can any project use it?</strong>
+                  <br />
+                  Yes. They set their vault + fee parameters in config.
+                </p>
+                <p>
+                  <strong>Do buybacks have to be automatic?</strong>
+                  <br />
+                  No. You can run scheduled buybacks or manual buybacks with
+                  public receipts.
+                </p>
               </article>
             </div>
           </div>
