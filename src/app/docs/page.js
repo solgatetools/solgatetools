@@ -119,15 +119,32 @@ export default function DocsPage() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [tocOpen]);
 
-  const goTo = (id) => (e) => {
-    e.preventDefault();
-    setTocOpen(false);
-
+  // Mobile-safe scroll: close TOC -> wait for layout -> scroll with header offset
+  const scrollToId = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    const header = document.querySelector(".site-header");
+    const offset = (header?.offsetHeight ?? 0) + 16;
+
+    const y = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: y, behavior: "smooth" });
+
     history.replaceState(null, "", `#${id}`);
+  };
+
+  const goTo = (id) => (e) => {
+    e.preventDefault();
+
+    // 1) close mobile TOC
+    setTocOpen(false);
+
+    // 2) wait for layout to settle (TOC collapse changes page height)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollToId(id);
+      });
+    });
   };
 
   return (
