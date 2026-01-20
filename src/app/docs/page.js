@@ -119,30 +119,10 @@ export default function DocsPage() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [tocOpen]);
 
-  // Mobile-safe scroll:
-  // 1) scroll immediately (still inside user click)
-  // 2) close TOC after a short delay (layout change won't affect target calc)
-  const scrollToId = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    const header = document.querySelector(".site-header");
-    const offset = (header?.offsetHeight ?? 0) + 16;
-
-    const y = el.getBoundingClientRect().top + window.scrollY - offset;
-
-    window.scrollTo({ top: y, behavior: "smooth" });
-    history.replaceState(null, "", `#${id}`);
-  };
-
-  const goTo = (id) => (e) => {
-    e.preventDefault();
-
-    // Scroll now (reliable on mobile)
-    scrollToId(id);
-
-    // Then close the TOC (after scroll started)
-    window.setTimeout(() => setTocOpen(false), 250);
+  // iPhone Safari: rely on native anchor scrolling for reliability.
+  // Just close the TOC right after the click (do NOT preventDefault).
+  const onTocLinkClick = () => {
+    window.setTimeout(() => setTocOpen(false), 0);
   };
 
   return (
@@ -185,28 +165,28 @@ export default function DocsPage() {
               </button>
 
               <nav className="toc" id="toc" aria-label="Table of contents">
-                <a href="#what" onClick={goTo("what")}>
+                <a href="#what" onClick={onTocLinkClick}>
                   What it is
                 </a>
-                <a href="#flow" onClick={goTo("flow")}>
+                <a href="#flow" onClick={onTocLinkClick}>
                   Fee split
                 </a>
-                <a href="#install" onClick={goTo("install")}>
+                <a href="#install" onClick={onTocLinkClick}>
                   Install
                 </a>
-                <a href="#usage" onClick={goTo("usage")}>
+                <a href="#usage" onClick={onTocLinkClick}>
                   Usage
                 </a>
-                <a href="#config" onClick={goTo("config")}>
+                <a href="#config" onClick={onTocLinkClick}>
                   Config reference
                 </a>
-                <a href="#vault" onClick={goTo("vault")}>
+                <a href="#vault" onClick={onTocLinkClick}>
                   Buyback vault
                 </a>
-                <a href="#security" onClick={goTo("security")}>
+                <a href="#security" onClick={onTocLinkClick}>
                   Security notes
                 </a>
-                <a href="#faq" onClick={goTo("faq")}>
+                <a href="#faq" onClick={onTocLinkClick}>
                   FAQ
                 </a>
               </nav>
