@@ -119,25 +119,16 @@ export default function DocsPage() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [tocOpen]);
 
-  const scrollToId = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    const header = document.querySelector(".site-header");
-    const offset = (header?.offsetHeight ?? 0) + 16;
-
-    const y = el.getBoundingClientRect().top + window.scrollY - offset;
-
-    // iPhone Safari: "smooth" is often unreliable; use auto for determinism.
-    window.scrollTo({ top: y, behavior: "auto" });
-  };
-
+  // iPhone Safari fix:
+  // - set hash (native jump)
+  // - close TOC
+  // - then re-align with scrollIntoView after layout/address bar settles
   const goTo = (id) => (e) => {
     e.preventDefault();
 
     const hash = `#${id}`;
 
-    // If same hash is clicked again, Safari may ignore it.
+    // If clicking same section repeatedly, Safari may ignore same-hash navigation
     if (window.location.hash === hash) {
       history.replaceState(
         null,
@@ -146,14 +137,25 @@ export default function DocsPage() {
       );
     }
 
-    // Force native anchor jump in Safari
+    // Native jump
     window.location.hash = hash;
 
-    // Close TOC after hash is set
-    window.setTimeout(() => setTocOpen(false), 250);
+    // Close TOC (mobile)
+    setTocOpen(false);
 
-    // Fallback: align for sticky header and any Safari weirdness
-    window.setTimeout(() => scrollToId(id), 450);
+    // Re-align once after layout settles
+    window.setTimeout(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: "auto", block: "start" });
+    }, 250);
+
+    // Re-align again to survive iOS address bar animation
+    window.setTimeout(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: "auto", block: "start" });
+    }, 650);
   };
 
   return (
