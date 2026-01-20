@@ -119,7 +119,9 @@ export default function DocsPage() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [tocOpen]);
 
-  // Mobile-safe scroll: close TOC -> wait for layout -> scroll with header offset
+  // Mobile-safe scroll:
+  // 1) scroll immediately (still inside user click)
+  // 2) close TOC after a short delay (layout change won't affect target calc)
   const scrollToId = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -128,23 +130,19 @@ export default function DocsPage() {
     const offset = (header?.offsetHeight ?? 0) + 16;
 
     const y = el.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top: y, behavior: "smooth" });
 
+    window.scrollTo({ top: y, behavior: "smooth" });
     history.replaceState(null, "", `#${id}`);
   };
 
   const goTo = (id) => (e) => {
     e.preventDefault();
 
-    // 1) close mobile TOC
-    setTocOpen(false);
+    // Scroll now (reliable on mobile)
+    scrollToId(id);
 
-    // 2) wait for layout to settle (TOC collapse changes page height)
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollToId(id);
-      });
-    });
+    // Then close the TOC (after scroll started)
+    window.setTimeout(() => setTocOpen(false), 250);
   };
 
   return (
