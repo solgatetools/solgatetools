@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const paymentSplitCode = `// Payment split math (example)
@@ -165,7 +166,16 @@ export default function DocsPage() {
       <header className="site-header">
         <div className="container header-inner">
           <a className="logo" href="/">
-            <div className="logo-mark" aria-hidden="true"></div>
+            <div className="logo-mark" aria-hidden="true">
+              <Image
+                src="/solgate-logo.png"
+                alt=""
+                width={36}
+                height={36}
+                priority
+                sizes="36px"
+              />
+            </div>
             <div className="logo-text">
               <div>SolGate</div>
               <small className="subline">Usage → Buybacks</small>
