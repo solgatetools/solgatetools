@@ -1,15 +1,15 @@
 # SolGate
 
-SolGate is a programmable HTTP 402 payment layer that routes usage fees into automated buybacks — turning real product usage into measurable buy pressure.
+SolGate is a programmable HTTP 402 payment layer that routes usage revenue into configurable buybacks — turning real product usage into measurable buy pressure.
 
-- No transfer tax
+- No transfer tax (fees apply only to paid requests)
 - Configurable fee basis points
 - Vault routing for buybacks
 - Designed for transparent receipts
 
 ## What this repo contains
 
-This repository hosts the SolGate website (landing + documentation).
+This repository hosts the SolGate website (landing + documentation) built with Next.js (App Router).
 
 ## Local development
 
