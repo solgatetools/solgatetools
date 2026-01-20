@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const BRAND = "SolGate";
@@ -66,7 +67,17 @@ export default function Home() {
       <header className="site-header">
         <div className="container header-inner">
           <a className="logo" href="#top">
-            <div className="logo-mark" aria-hidden="true"></div>
+            <div className="logo-mark" aria-hidden="true">
+              <Image
+                src="/solgate-logo.png"
+                alt=""
+                width={36}
+                height={36}
+                priority
+                sizes="36px"
+              />
+            </div>
+
             <div className="logo-text">
               <div>{BRAND}</div>
               <small className="subline">{SUBLINE}</small>
