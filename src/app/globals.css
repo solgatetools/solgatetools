@@ -372,6 +372,10 @@ h1 {
   font-size: 12px;
   letter-spacing: 0.4px;
   text-transform: uppercase;
+
+  /* smoother hover/focus feel */
+  transition: transform 0.15s ease, background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .button.primary {
@@ -391,7 +395,6 @@ h1 {
 
 .button:hover {
   transform: translateY(-1px);
-  transition: 0.15s ease;
 }
 
 .tag-row {
@@ -604,6 +607,55 @@ code {
 pre,
 code {
   max-width: 100%;
+}
+
+/* Contract address copy field (dark/glass, read-only) */
+.copy-field {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  min-width: 0;
+}
+
+.copy-field input {
+  flex: 1;
+  min-width: 0;
+
+  -webkit-appearance: none;
+  appearance: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(245, 247, 255, 0.92);
+
+  border-radius: 12px;
+  padding: 10px 12px;
+
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.25px;
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.copy-field input::selection {
+  background: rgba(94, 234, 212, 0.22);
+}
+
+.copy-field input:hover {
+  border-color: rgba(115, 130, 155, 0.28);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.copy-field input:focus {
+  outline: none;
+  border-color: rgba(94, 234, 212, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 3px rgba(94, 234, 212, 0.12);
+}
+
+.copy-field .button.small {
+  white-space: nowrap;
 }
 
 /* Notes */
