@@ -180,7 +180,7 @@ export default function Home() {
                 <div className="copy-field">
                   <input
                     ref={contractRef}
-                    value="default"
+                    value="AQJmZN8ADM4rMRTPhiSgdMy7NHFtwKitdAPgJPoUpump"
                     readOnly
                     onClick={(e) => e.currentTarget.select()}
                     aria-label="Contract address"
